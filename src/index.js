@@ -1,31 +1,25 @@
 const express = require("express")
 const { createServer } = require("http")
-const { Server } = require("socket.io")
 const path = require("path")
+const realtimeServer = require("./realtimeServer")
 
 const app = express()
 const httpServer = createServer(app)
-const io = new Server(httpServer)
 
-app.use(express.static(path.join(__dirname, "views")))
+// settings
+app.set("port", process.env.PORT || 3000)
+app.set("views", path.join(__dirname, "views"))
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/views/index.html")
+// routes
+app.use(require("./routes"))
+
+// public
+app.use(express.static(path.join(__dirname, "public")))
+
+// up the server
+httpServer.listen(app.get("port"), () => {
+  console.log("El servidor está corriendo en el puerto", app.get("port"))
 })
 
-io.on("connection", (socket) => {
-  // console.log("Clientes conectados: ", io.engine.clientsCount)
-  // console.log("ID del cliente conectado: ", socket.id)
-  // socket.on("disconnect", () => {
-  //   console.log("El socket " + socket.id + " se ha desconectado")
-  // })
-
-  socket.conn.once("upgrade", () => {
-    console.log(
-      "Hemos pasado de HTTP Long-Polling a",
-      socket.conn.transport.name
-    )
-  })
-})
-
-httpServer.listen(3000)
+// call socket server
+realtimeServer(httpServer)
