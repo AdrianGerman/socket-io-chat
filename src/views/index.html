@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WebChat</title>
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/chat.css" />
     <script src="/socket.io/socket.io.js" type="module"></script>
     <script src="js/script.js" type="module"></script>
   </head>
@@ -12,5 +13,16 @@
     <header>
       <h1>Heim Chat</h1>
     </header>
+
+    <main>
+      <div id="all-messages"></div>
+
+      <div class="send-message">
+        <input type="text" id="message" />
+        <button type="button" id="send-message" class="btn secondary">
+          Enviar
+        </button>
+      </div>
+    </main>
   </body>
 </html>
